@@ -86,6 +86,7 @@ class Comment(models.Model):
         """Вывод текста комментария."""
         return self.text
 
+
 class Follow(models.Model):
     """Модель подписок: автор контента и подписчик."""
 

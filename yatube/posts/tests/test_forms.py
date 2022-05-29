@@ -8,8 +8,8 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from ..forms import PostForm, CommentForm
-from ..models import Post, Group, Comment, Follow
+from ..forms import PostForm
+from ..models import Post, Group, Comment
 
 
 User = get_user_model()
