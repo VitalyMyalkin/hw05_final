@@ -128,7 +128,7 @@ class PostFormTests(TestCase):
             b'\x02\x4c\x01\x00\x3b'
         )
         uploaded = SimpleUploadedFile(
-            name='small.gif',
+            name='image.gif',
             content=small_gif,
             content_type='image/gif'
         )
@@ -155,7 +155,7 @@ class PostFormTests(TestCase):
         # Проверяю в нем все, что поменял
         self.assertEqual(post.text, 'Новый текст поста')
         self.assertEqual(post.group, self.group2)
-        self.assertEqual(post.image, 'posts/small.gif')
+        self.assertEqual(post.image, 'posts/image.gif')
 
     def test_title_label(self):
         text_label = PostFormTests.form.fields['text'].label
