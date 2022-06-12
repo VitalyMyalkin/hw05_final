@@ -12,7 +12,8 @@ def index(request):
     """Создает главную страницу с пажинатором"""
     context = {
         'page_obj': create_pages(request,
-                                 Post.objects.select_related('author', 'group').all()),
+                                 Post.objects.select_related('author',
+                                                             'group').all()),
     }
     return render(request, 'posts/index.html', context)
 
@@ -35,7 +36,8 @@ def profile(request, username):
         context = {
             'author': author,
             'page_obj': create_pages(request,
-                                     author.posts.select_related('group',).all()),
+                                     author.posts.select_related('group',
+                                                                 ).all()),
             'following': Follow.objects.filter(user=request.user,
                                                author=author
                                                ).exists()
@@ -44,7 +46,8 @@ def profile(request, username):
         context = {
             'author': author,
             'page_obj': create_pages(request,
-                                     author.posts.select_related('group',).all())
+                                     author.posts.select_related('group',
+                                                                 ).all())
         }
     return render(request, 'posts/profile.html', context)
 
