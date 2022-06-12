@@ -90,6 +90,7 @@ class PostFormTests(TestCase):
         self.assertEqual(first_object.text, 'Тестовый текст')
         self.assertEqual(first_object.group, self.group)
         self.assertEqual(first_object.author, self.user)
+        self.assertEqual(first_object.image, 'posts/small.gif')
 
     def test_add_comment(self):
         """Валидная форма создает комментарий к посту."""
@@ -119,9 +120,23 @@ class PostFormTests(TestCase):
         """Тестирование редактирования поста."""
         posts_count = Post.objects.count()
 
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x01\x00'
+            b'\x01\x00\x00\x00\x00\x21\xf9\x04'
+            b'\x01\x0a\x00\x01\x00\x2c\x00\x00'
+            b'\x00\x00\x01\x00\x01\x00\x00\x02'
+            b'\x02\x4c\x01\x00\x3b'
+        )
+        uploaded = SimpleUploadedFile(
+            name='small.gif',
+            content=small_gif,
+            content_type='image/gif'
+        )
+
         form_data = {
             'text': 'Новый текст поста',
             'group': self.group2.id,
+            'image': uploaded
         }
         # Отправляем POST-запрос
         response = self.authorized_client.post(
@@ -140,6 +155,7 @@ class PostFormTests(TestCase):
         # Проверяю в нем все, что поменял
         self.assertEqual(post.text, 'Новый текст поста')
         self.assertEqual(post.group, self.group2)
+        self.assertEqual(post.image, 'posts/small.gif')
 
     def test_title_label(self):
         text_label = PostFormTests.form.fields['text'].label

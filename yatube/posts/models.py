@@ -1,6 +1,7 @@
 from django.db import models
-
 from django.contrib.auth import get_user_model
+
+from .validators import validate_not_empty
 
 User = get_user_model()
 
@@ -30,7 +31,7 @@ class Post(models.Model):
     У постов есть текст, картинка, дата публикации, сообщество,
     где пост опубликован, и пользователь-создатель."""
 
-    text = models.TextField()
+    text = models.TextField(validators=[validate_not_empty])
     pub_date = models.DateTimeField(auto_now_add=True)
     group = models.ForeignKey(
         Group,
@@ -67,7 +68,7 @@ class Comment(models.Model):
     У комментариев есть текст, пост, к которому относится
     комментарий, дата публикации и пользователь-создатель."""
 
-    text = models.TextField()
+    text = models.TextField(validators=[validate_not_empty])
     pub_date = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(
         Post,
@@ -81,6 +82,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
+
+    class Meta:
+        ordering = ('-pub_date',)
 
     def __str__(self):
         """Вывод текста комментария."""

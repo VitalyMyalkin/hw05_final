@@ -11,21 +11,14 @@ class PostForm(forms.ModelForm):
         fields = ('text', 'group', 'image')
         labels = {
             'text': 'Текст',
-            'group': 'Группа'
+            'group': 'Группа',
+            'image': 'Картинка'
         }
         help_texts = {
             'text': 'Текст нового поста',
-            'group': 'Группа, к которой будет относиться пост'
+            'group': 'Группа, к которой будет относиться пост',
+            'image': 'Прикрепите к посту изображение'
         }
-
-    def validate_not_empty(self):
-        """Проверка заполнения поля [текст]"""
-        data = self.cleaned_data['text']
-        if data == '':
-            raise forms.ValidationError(
-                'Введите текст поста!'
-            )
-        return data
 
 
 class CommentForm(forms.ModelForm):
@@ -34,12 +27,3 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
-
-    def validate_not_empty(self):
-        """Проверка заполнения поля [текст]"""
-        data = self.cleaned_data['text']
-        if data == '':
-            raise forms.ValidationError(
-                'Введите текст комментария!'
-            )
-        return data

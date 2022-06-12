@@ -12,7 +12,7 @@ def index(request):
     """Создает главную страницу с пажинатором"""
     context = {
         'page_obj': create_pages(request,
-                                 Post.objects.all().order_by('-pub_date')),
+                                 Post.objects.select_related('author', 'group').all()),
     }
     return render(request, 'posts/index.html', context)
 
@@ -23,7 +23,7 @@ def group_posts(request, slug):
     context = {
         'group': group,
         'page_obj': create_pages(request,
-                                 group.posts.all().order_by('-pub_date'))
+                                 group.posts.select_related('author').all())
     }
     return render(request, 'posts/group_list.html', context)
 
@@ -35,7 +35,7 @@ def profile(request, username):
         context = {
             'author': author,
             'page_obj': create_pages(request,
-                                     author.posts.all().order_by('-pub_date')),
+                                     author.posts.select_related('group',).all()),
             'following': Follow.objects.filter(user=request.user,
                                                author=author
                                                ).exists()
@@ -44,7 +44,7 @@ def profile(request, username):
         context = {
             'author': author,
             'page_obj': create_pages(request,
-                                     author.posts.all().order_by('-pub_date'))
+                                     author.posts.select_related('group',).all())
         }
     return render(request, 'posts/profile.html', context)
 
@@ -55,7 +55,7 @@ def post_detail(request, post_id):
     context = {
         'post': post,
         'form': CommentForm(request.POST or None),
-        'comments': post.comments.all().order_by('pub_date')
+        'comments': post.comments.select_related('author',).all()
     }
     return render(request, 'posts/post_detail.html', context)
 
@@ -110,9 +110,9 @@ def follow_index(request):
     context = {
         'page_obj': create_pages(
             request,
-            Post.objects.filter(
+            Post.objects.select_related('author', 'group').filter(
                 author__following__user=request.user
-            ).all().order_by('-pub_date')),
+            ).all()),
     }
     return render(request, 'posts/follow.html', context)
 
